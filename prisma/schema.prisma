@@ -1,0 +1,122 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:dev.db"
+  default  = true
+}
+
+generator photon {
+  provider = "photonjs"
+}
+
+generator nexus_prisma {
+  provider = "nexus-prisma"
+  output   = "../node_modules/@generated/nexus-prisma"
+}
+
+model School {
+  id    String  @default(cuid()) @id @unique
+  name String
+  website String?
+  phone String
+  teachers Teacher[] @relation(onDelete: CASCADE)
+  classrooms Classroom[] @relation(onDelete: CASCADE)
+  schoolYears SchoolYear[]
+  createdAt DateTime @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Classroom {
+  id    String  @default(cuid()) @id @unique
+  academicLevel AcademicLevel @relation(onDelete: NONE)
+  teachers Teacher[] @relation(onDelete: NONE)
+  school School @relation(onDelete: NONE)
+  schoolYears SchoolYear[]
+}
+
+model Student {
+  id    String  @default(cuid()) @id @unique
+  firstName String
+  lastName String
+  birthDate DateTime
+  gender Gender
+  password String
+  schoolYears SchoolYear[]
+  username String @unique
+}
+
+model SchoolYear {
+   id    String  @default(cuid()) @id @unique
+   year DateTime
+   student Student
+   school School
+   classroom Classroom
+   ppre PPRE?
+}
+
+model AcademicLevel {
+   id    String  @default(cuid()) @id @unique
+   name String
+   classrooms Classroom[] @relation(onDelete: NONE)
+}
+
+model PPRE {
+  id    String  @default(cuid()) @id @unique
+  skills Skill[]
+  schoolYear SchoolYear
+  checkups PPRECheckup[]
+  globalAssessment String?
+  nature PPRENature
+  schoolAttendance SchoolAttendance
+  createdAt DateTime @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model PPRECheckup {
+  id    String  @default(cuid()) @id @unique
+  ppre PPRE
+  phase Int
+  skillWorked Skill
+  assessment String
+}
+
+
+model Teacher {
+  id    String  @default(cuid()) @id @unique
+  school School @relation(onDelete: NONE)
+  firstName String
+  lastName String
+  role Role @default(DEFAULT)
+  password String
+  username String @unique
+}
+
+model Skill {
+  id    String  @default(cuid()) @id @unique
+  parent Skill?
+  name String
+  ppreCheckup PPRECheckup[]
+  ppre PPRE[]
+}
+
+
+enum Role {
+  DEFAULT
+  MANAGER
+  ADMIN
+}
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+enum PPRENature {
+  REMEDIATION
+  SUPPORT
+  UPGRADE
+}
+enum SchoolAttendance {
+  ALWAYS
+  SHORTFREQUENTABSENCES
+  LONGABSENCES
+  FREQUENTDELAYS
+}
