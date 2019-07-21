@@ -1,30 +1,34 @@
-import { Query }         from './Query';
-import { AcademicLevel } from "./AcademicLevel";
-import { Classroom }     from "./Classroom";
-import { Teacher }       from "./Teacher";
-import { Student }       from "./Student";
-import { SchoolYear }    from "./SchoolYear";
-import { School }        from "./School";
-import { Mutation }      from "./Mutation";
-import { PPRE }          from "./PPRE";
-import { PPRECheckup }   from "./PPRECheckup";
-import { Skill }         from "./Skill";
-import { AuthPayload }   from "./AuthPayload";
+import { Query }                 from './Query';
+
+import { Classroom }             from "./Classroom";
+import { Teacher }               from "./Teacher";
+import { Student }               from "./Student";
+
+import { School }                from "./School";
+import { Mutation }              from "./Mutation";
+import { PPRE }                  from "./PPRE";
+import { PPRECheckup }           from "./PPRECheckup";
+import { Skill }                 from "./Skill";
+import { AuthPayload }           from "./AuthPayload";
+import { UpdateOneTeacherInput } from "./UpdateOneTeacherInput";
+import { StudentClassYear }      from "./StudentClassYear";
+import { ClassroomUpdateInput }  from "./ClassroomUpdateInput";
 
 
 export const resolvers = {
   Query,
   Mutation,
   School,
-  SchoolYear,
   Student,
   Teacher,
   Classroom,
-  AcademicLevel,
+  StudentClassYear,
   PPRE,
   PPRECheckup,
   Skill,
-  AuthPayload
+  AuthPayload,
+  UpdateOneTeacherInput,
+  ClassroomUpdateInput
   // Role,
   // Gender
 };

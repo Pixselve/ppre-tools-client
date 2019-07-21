@@ -4,11 +4,16 @@ export const Teacher = objectType({
   name: 'Teacher',
   definition(t) {
     t.model.id();
-    t.model.school();
-    t.model.role();
-    t.model.lastName();
     t.model.firstName();
-    t.model.classroom();
-    t.model.username()
+    t.model.lastName();
+    t.model.school();
+    t.model.avatar();
+    t.model.role();
+    t.model.username();
+    t.model.email();
+    t.model.password();
+    t.model.createdAt();
+    t.model.updatedAt();
+    t.model.classrooms();
   },
 });

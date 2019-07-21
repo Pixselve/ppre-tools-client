@@ -5,10 +5,13 @@ export const School = objectType({
   definition(t) {
     t.model.id();
     t.model.name();
-    t.model.classrooms();
+    t.model.webstite();
     t.model.phone();
-    t.model.schoolYears();
     t.model.teachers();
-    t.model.website();
+    t.model.classrooms();
+    t.model.createdAt();
+    t.model.updatedAt();
+    t.model.studentsClassYears();
+    t.model.skills();
   },
 });

@@ -19,41 +19,43 @@ declare global {
 }
 
 export interface NexusGenInputs {
-  AcademicLevelCreateInput: { // input type
-    classrooms?: NexusGenInputs['ClassroomCreateManyWithoutClassroomsInput'] | null; // ClassroomCreateManyWithoutClassroomsInput
+  ClassroomCreateInput: { // input type
+    academicLevel: string; // String!
     id?: string | null; // ID
     name: string; // String!
-  }
-  AcademicLevelCreateOneWithoutAcademicLevelInput: { // input type
-    connect?: NexusGenInputs['AcademicLevelWhereUniqueInput'] | null; // AcademicLevelWhereUniqueInput
-    create?: NexusGenInputs['AcademicLevelCreateWithoutClassroomsInput'] | null; // AcademicLevelCreateWithoutClassroomsInput
-  }
-  AcademicLevelCreateWithoutClassroomsInput: { // input type
-    id?: string | null; // ID
-    name: string; // String!
-  }
-  AcademicLevelWhereUniqueInput: { // input type
-    id?: string | null; // ID
+    school: NexusGenInputs['SchoolCreateOneWithoutSchoolInput']; // SchoolCreateOneWithoutSchoolInput!
+    studentsClassYears?: NexusGenInputs['StudentClassYearCreateManyWithoutStudentsClassYearsInput'] | null; // StudentClassYearCreateManyWithoutStudentsClassYearsInput
+    teachers?: NexusGenInputs['TeacherCreateManyWithoutTeachersInput'] | null; // TeacherCreateManyWithoutTeachersInput
+    year: string; // String!
   }
   ClassroomCreateManyWithoutClassroomsInput: { // input type
     connect?: NexusGenInputs['ClassroomWhereUniqueInput'][] | null; // [ClassroomWhereUniqueInput!]
-    create?: NexusGenInputs['ClassroomCreateWithoutSchoolInput'][] | null; // [ClassroomCreateWithoutSchoolInput!]
+    create?: NexusGenInputs['ClassroomCreateWithoutTeachersInput'][] | null; // [ClassroomCreateWithoutTeachersInput!]
   }
   ClassroomCreateOneWithoutClassroomInput: { // input type
     connect?: NexusGenInputs['ClassroomWhereUniqueInput'] | null; // ClassroomWhereUniqueInput
-    create?: NexusGenInputs['ClassroomCreateWithoutTeachersInput'] | null; // ClassroomCreateWithoutTeachersInput
+    create?: NexusGenInputs['ClassroomCreateWithoutStudentsClassYearsInput'] | null; // ClassroomCreateWithoutStudentsClassYearsInput
   }
-  ClassroomCreateWithoutSchoolInput: { // input type
-    academicLevel: NexusGenInputs['AcademicLevelCreateOneWithoutAcademicLevelInput']; // AcademicLevelCreateOneWithoutAcademicLevelInput!
+  ClassroomCreateWithoutStudentsClassYearsInput: { // input type
+    academicLevel: string; // String!
     id?: string | null; // ID
-    schoolYears?: NexusGenInputs['SchoolYearCreateManyWithoutSchoolYearsInput'] | null; // SchoolYearCreateManyWithoutSchoolYearsInput
+    name: string; // String!
+    school: NexusGenInputs['SchoolCreateOneWithoutSchoolInput']; // SchoolCreateOneWithoutSchoolInput!
     teachers?: NexusGenInputs['TeacherCreateManyWithoutTeachersInput'] | null; // TeacherCreateManyWithoutTeachersInput
+    year: string; // String!
   }
   ClassroomCreateWithoutTeachersInput: { // input type
-    academicLevel: NexusGenInputs['AcademicLevelCreateOneWithoutAcademicLevelInput']; // AcademicLevelCreateOneWithoutAcademicLevelInput!
+    academicLevel: string; // String!
     id?: string | null; // ID
+    name: string; // String!
     school: NexusGenInputs['SchoolCreateOneWithoutSchoolInput']; // SchoolCreateOneWithoutSchoolInput!
-    schoolYears?: NexusGenInputs['SchoolYearCreateManyWithoutSchoolYearsInput'] | null; // SchoolYearCreateManyWithoutSchoolYearsInput
+    studentsClassYears?: NexusGenInputs['StudentClassYearCreateManyWithoutStudentsClassYearsInput'] | null; // StudentClassYearCreateManyWithoutStudentsClassYearsInput
+    year: string; // String!
+  }
+  ClassroomUpdateInput: { // input type
+    academicLevel?: string | null; // String
+    name?: string | null; // String
+    teachers?: NexusGenInputs['TeacherWhereUniqueInput'][] | null; // [TeacherWhereUniqueInput!]
   }
   ClassroomWhereUniqueInput: { // input type
     id?: string | null; // ID
@@ -62,15 +64,15 @@ export interface NexusGenInputs {
     connect?: NexusGenInputs['PPRECheckupWhereUniqueInput'][] | null; // [PPRECheckupWhereUniqueInput!]
     create?: NexusGenInputs['PPRECheckupCreateWithoutPpreInput'][] | null; // [PPRECheckupCreateWithoutPpreInput!]
   }
-  PPRECheckupCreateManyWithoutPpreCheckupInput: { // input type
-    connect?: NexusGenInputs['PPRECheckupWhereUniqueInput'][] | null; // [PPRECheckupWhereUniqueInput!]
-    create?: NexusGenInputs['PPRECheckupCreateWithoutSkillWorkedInput'][] | null; // [PPRECheckupCreateWithoutSkillWorkedInput!]
+  PPRECheckupCreateOneWithoutPPRECheckupInput: { // input type
+    connect?: NexusGenInputs['PPRECheckupWhereUniqueInput'] | null; // PPRECheckupWhereUniqueInput
+    create?: NexusGenInputs['PPRECheckupCreateWithoutSkillWorkedInput'] | null; // PPRECheckupCreateWithoutSkillWorkedInput
   }
   PPRECheckupCreateWithoutPpreInput: { // input type
     assessment: string; // String!
     id?: string | null; // ID
     phase: number; // Int!
-    skillWorked: NexusGenInputs['SkillCreateOneWithoutSkillWorkedInput']; // SkillCreateOneWithoutSkillWorkedInput!
+    skillWorked?: NexusGenInputs['SkillCreateManyWithoutSkillWorkedInput'] | null; // SkillCreateManyWithoutSkillWorkedInput
   }
   PPRECheckupCreateWithoutSkillWorkedInput: { // input type
     assessment: string; // String!
@@ -81,29 +83,44 @@ export interface NexusGenInputs {
   PPRECheckupWhereUniqueInput: { // input type
     id?: string | null; // ID
   }
-  PPRECreateManyWithoutPpreInput: { // input type
-    connect?: NexusGenInputs['PPREWhereUniqueInput'][] | null; // [PPREWhereUniqueInput!]
-    create?: NexusGenInputs['PPRECreateWithoutSkillsInput'][] | null; // [PPRECreateWithoutSkillsInput!]
-  }
   PPRECreateOneWithoutPpreInput: { // input type
     connect?: NexusGenInputs['PPREWhereUniqueInput'] | null; // PPREWhereUniqueInput
-    create?: NexusGenInputs['PPRECreateWithoutSchoolYearInput'] | null; // PPRECreateWithoutSchoolYearInput
+    create?: NexusGenInputs['PPRECreateWithoutStudentsClassYearInput'] | null; // PPRECreateWithoutStudentsClassYearInput
   }
-  PPRECreateWithoutSchoolYearInput: { // input type
+  PPRECreateOneWithoutSkillsConcernedPPREInput: { // input type
+    connect?: NexusGenInputs['PPREWhereUniqueInput'] | null; // PPREWhereUniqueInput
+    create?: NexusGenInputs['PPRECreateWithoutSkillsConcernedInput'] | null; // PPRECreateWithoutSkillsConcernedInput
+  }
+  PPRECreateOneWithoutSkillsToWorkPPREInput: { // input type
+    connect?: NexusGenInputs['PPREWhereUniqueInput'] | null; // PPREWhereUniqueInput
+    create?: NexusGenInputs['PPRECreateWithoutSkillsToWorkInput'] | null; // PPRECreateWithoutSkillsToWorkInput
+  }
+  PPRECreateWithoutSkillsConcernedInput: { // input type
     checkups?: NexusGenInputs['PPRECheckupCreateManyWithoutCheckupsInput'] | null; // PPRECheckupCreateManyWithoutCheckupsInput
     globalAssessment?: string | null; // String
     id?: string | null; // ID
     nature: NexusGenEnums['PPRENature']; // PPRENature!
     schoolAttendance: NexusGenEnums['SchoolAttendance']; // SchoolAttendance!
-    skills?: NexusGenInputs['SkillCreateManyWithoutSkillsInput'] | null; // SkillCreateManyWithoutSkillsInput
+    skillsToWork?: NexusGenInputs['SkillCreateManyWithoutSkillsToWorkInput'] | null; // SkillCreateManyWithoutSkillsToWorkInput
+    studentsClassYear: NexusGenInputs['StudentClassYearCreateOneWithoutStudentsClassYearInput']; // StudentClassYearCreateOneWithoutStudentsClassYearInput!
   }
-  PPRECreateWithoutSkillsInput: { // input type
+  PPRECreateWithoutSkillsToWorkInput: { // input type
     checkups?: NexusGenInputs['PPRECheckupCreateManyWithoutCheckupsInput'] | null; // PPRECheckupCreateManyWithoutCheckupsInput
     globalAssessment?: string | null; // String
     id?: string | null; // ID
     nature: NexusGenEnums['PPRENature']; // PPRENature!
     schoolAttendance: NexusGenEnums['SchoolAttendance']; // SchoolAttendance!
-    schoolYear: NexusGenInputs['SchoolYearCreateOneWithoutSchoolYearInput']; // SchoolYearCreateOneWithoutSchoolYearInput!
+    skillsConcerned?: NexusGenInputs['SkillCreateManyWithoutSkillsConcernedInput'] | null; // SkillCreateManyWithoutSkillsConcernedInput
+    studentsClassYear: NexusGenInputs['StudentClassYearCreateOneWithoutStudentsClassYearInput']; // StudentClassYearCreateOneWithoutStudentsClassYearInput!
+  }
+  PPRECreateWithoutStudentsClassYearInput: { // input type
+    checkups?: NexusGenInputs['PPRECheckupCreateManyWithoutCheckupsInput'] | null; // PPRECheckupCreateManyWithoutCheckupsInput
+    globalAssessment?: string | null; // String
+    id?: string | null; // ID
+    nature: NexusGenEnums['PPRENature']; // PPRENature!
+    schoolAttendance: NexusGenEnums['SchoolAttendance']; // SchoolAttendance!
+    skillsConcerned?: NexusGenInputs['SkillCreateManyWithoutSkillsConcernedInput'] | null; // SkillCreateManyWithoutSkillsConcernedInput
+    skillsToWork?: NexusGenInputs['SkillCreateManyWithoutSkillsToWorkInput'] | null; // SkillCreateManyWithoutSkillsToWorkInput
   }
   PPREWhereUniqueInput: { // input type
     id?: string | null; // ID
@@ -113,9 +130,10 @@ export interface NexusGenInputs {
     id?: string | null; // ID
     name: string; // String!
     phone: string; // String!
-    schoolYears?: NexusGenInputs['SchoolYearCreateManyWithoutSchoolYearsInput'] | null; // SchoolYearCreateManyWithoutSchoolYearsInput
+    skills?: NexusGenInputs['SkillCreateManyWithoutSkillsInput'] | null; // SkillCreateManyWithoutSkillsInput
+    studentsClassYears?: NexusGenInputs['StudentClassYearCreateManyWithoutStudentsClassYearsInput'] | null; // StudentClassYearCreateManyWithoutStudentsClassYearsInput
     teachers?: NexusGenInputs['TeacherCreateManyWithoutTeachersInput'] | null; // TeacherCreateManyWithoutTeachersInput
-    website?: string | null; // String
+    webstite?: string | null; // String
   }
   SchoolCreateOneWithoutSchoolInput: { // input type
     connect?: NexusGenInputs['SchoolWhereUniqueInput'] | null; // SchoolWhereUniqueInput
@@ -125,90 +143,125 @@ export interface NexusGenInputs {
     id?: string | null; // ID
     name: string; // String!
     phone: string; // String!
-    schoolYears?: NexusGenInputs['SchoolYearCreateManyWithoutSchoolYearsInput'] | null; // SchoolYearCreateManyWithoutSchoolYearsInput
+    skills?: NexusGenInputs['SkillCreateManyWithoutSkillsInput'] | null; // SkillCreateManyWithoutSkillsInput
+    studentsClassYears?: NexusGenInputs['StudentClassYearCreateManyWithoutStudentsClassYearsInput'] | null; // StudentClassYearCreateManyWithoutStudentsClassYearsInput
     teachers?: NexusGenInputs['TeacherCreateManyWithoutTeachersInput'] | null; // TeacherCreateManyWithoutTeachersInput
-    website?: string | null; // String
+    webstite?: string | null; // String
   }
   SchoolWhereUniqueInput: { // input type
     id?: string | null; // ID
   }
-  SchoolYearCreateManyWithoutSchoolYearsInput: { // input type
-    connect?: NexusGenInputs['SchoolYearWhereUniqueInput'][] | null; // [SchoolYearWhereUniqueInput!]
-    create?: NexusGenInputs['SchoolYearCreateWithoutSchoolInput'][] | null; // [SchoolYearCreateWithoutSchoolInput!]
+  SkillCreateManyWithoutSkillWorkedInput: { // input type
+    connect?: NexusGenInputs['SkillWhereUniqueInput'][] | null; // [SkillWhereUniqueInput!]
+    create?: NexusGenInputs['SkillCreateWithoutPPRECheckupInput'][] | null; // [SkillCreateWithoutPPRECheckupInput!]
   }
-  SchoolYearCreateOneWithoutSchoolYearInput: { // input type
-    connect?: NexusGenInputs['SchoolYearWhereUniqueInput'] | null; // SchoolYearWhereUniqueInput
-    create?: NexusGenInputs['SchoolYearCreateWithoutPpreInput'] | null; // SchoolYearCreateWithoutPpreInput
+  SkillCreateManyWithoutSkillsConcernedInput: { // input type
+    connect?: NexusGenInputs['SkillWhereUniqueInput'][] | null; // [SkillWhereUniqueInput!]
+    create?: NexusGenInputs['SkillCreateWithoutSkillsConcernedPPREInput'][] | null; // [SkillCreateWithoutSkillsConcernedPPREInput!]
   }
-  SchoolYearCreateWithoutPpreInput: { // input type
+  SkillCreateManyWithoutSkillsInput: { // input type
+    connect?: NexusGenInputs['SkillWhereUniqueInput'][] | null; // [SkillWhereUniqueInput!]
+    create?: NexusGenInputs['SkillCreateWithoutSchoolInput'][] | null; // [SkillCreateWithoutSchoolInput!]
+  }
+  SkillCreateManyWithoutSkillsToWorkInput: { // input type
+    connect?: NexusGenInputs['SkillWhereUniqueInput'][] | null; // [SkillWhereUniqueInput!]
+    create?: NexusGenInputs['SkillCreateWithoutSkillsToWorkPPREInput'][] | null; // [SkillCreateWithoutSkillsToWorkPPREInput!]
+  }
+  SkillCreateOneWithoutChildrenInput: { // input type
+    connect?: NexusGenInputs['SkillWhereUniqueInput'] | null; // SkillWhereUniqueInput
+    create?: NexusGenInputs['SkillCreateWithoutParentInput'] | null; // SkillCreateWithoutParentInput
+  }
+  SkillCreateOneWithoutParentInput: { // input type
+    connect?: NexusGenInputs['SkillWhereUniqueInput'] | null; // SkillWhereUniqueInput
+    create?: NexusGenInputs['SkillCreateWithoutChildrenInput'] | null; // SkillCreateWithoutChildrenInput
+  }
+  SkillCreateWithoutChildrenInput: { // input type
+    id?: string | null; // ID
+    name: string; // String!
+    parent: NexusGenInputs['SkillCreateOneWithoutParentInput']; // SkillCreateOneWithoutParentInput!
+    pPRECheckup?: NexusGenInputs['PPRECheckupCreateOneWithoutPPRECheckupInput'] | null; // PPRECheckupCreateOneWithoutPPRECheckupInput
+    school: NexusGenInputs['SchoolCreateOneWithoutSchoolInput']; // SchoolCreateOneWithoutSchoolInput!
+    skillsConcernedPPRE: NexusGenInputs['PPRECreateOneWithoutSkillsConcernedPPREInput']; // PPRECreateOneWithoutSkillsConcernedPPREInput!
+    skillsToWorkPPRE: NexusGenInputs['PPRECreateOneWithoutSkillsToWorkPPREInput']; // PPRECreateOneWithoutSkillsToWorkPPREInput!
+  }
+  SkillCreateWithoutPPRECheckupInput: { // input type
+    children?: NexusGenInputs['SkillCreateOneWithoutChildrenInput'] | null; // SkillCreateOneWithoutChildrenInput
+    id?: string | null; // ID
+    name: string; // String!
+    parent: NexusGenInputs['SkillCreateOneWithoutParentInput']; // SkillCreateOneWithoutParentInput!
+    school: NexusGenInputs['SchoolCreateOneWithoutSchoolInput']; // SchoolCreateOneWithoutSchoolInput!
+    skillsConcernedPPRE: NexusGenInputs['PPRECreateOneWithoutSkillsConcernedPPREInput']; // PPRECreateOneWithoutSkillsConcernedPPREInput!
+    skillsToWorkPPRE: NexusGenInputs['PPRECreateOneWithoutSkillsToWorkPPREInput']; // PPRECreateOneWithoutSkillsToWorkPPREInput!
+  }
+  SkillCreateWithoutParentInput: { // input type
+    children?: NexusGenInputs['SkillCreateOneWithoutChildrenInput'] | null; // SkillCreateOneWithoutChildrenInput
+    id?: string | null; // ID
+    name: string; // String!
+    pPRECheckup?: NexusGenInputs['PPRECheckupCreateOneWithoutPPRECheckupInput'] | null; // PPRECheckupCreateOneWithoutPPRECheckupInput
+    school: NexusGenInputs['SchoolCreateOneWithoutSchoolInput']; // SchoolCreateOneWithoutSchoolInput!
+    skillsConcernedPPRE: NexusGenInputs['PPRECreateOneWithoutSkillsConcernedPPREInput']; // PPRECreateOneWithoutSkillsConcernedPPREInput!
+    skillsToWorkPPRE: NexusGenInputs['PPRECreateOneWithoutSkillsToWorkPPREInput']; // PPRECreateOneWithoutSkillsToWorkPPREInput!
+  }
+  SkillCreateWithoutSchoolInput: { // input type
+    children?: NexusGenInputs['SkillCreateOneWithoutChildrenInput'] | null; // SkillCreateOneWithoutChildrenInput
+    id?: string | null; // ID
+    name: string; // String!
+    parent: NexusGenInputs['SkillCreateOneWithoutParentInput']; // SkillCreateOneWithoutParentInput!
+    pPRECheckup?: NexusGenInputs['PPRECheckupCreateOneWithoutPPRECheckupInput'] | null; // PPRECheckupCreateOneWithoutPPRECheckupInput
+    skillsConcernedPPRE: NexusGenInputs['PPRECreateOneWithoutSkillsConcernedPPREInput']; // PPRECreateOneWithoutSkillsConcernedPPREInput!
+    skillsToWorkPPRE: NexusGenInputs['PPRECreateOneWithoutSkillsToWorkPPREInput']; // PPRECreateOneWithoutSkillsToWorkPPREInput!
+  }
+  SkillCreateWithoutSkillsConcernedPPREInput: { // input type
+    children?: NexusGenInputs['SkillCreateOneWithoutChildrenInput'] | null; // SkillCreateOneWithoutChildrenInput
+    id?: string | null; // ID
+    name: string; // String!
+    parent: NexusGenInputs['SkillCreateOneWithoutParentInput']; // SkillCreateOneWithoutParentInput!
+    pPRECheckup?: NexusGenInputs['PPRECheckupCreateOneWithoutPPRECheckupInput'] | null; // PPRECheckupCreateOneWithoutPPRECheckupInput
+    school: NexusGenInputs['SchoolCreateOneWithoutSchoolInput']; // SchoolCreateOneWithoutSchoolInput!
+    skillsToWorkPPRE: NexusGenInputs['PPRECreateOneWithoutSkillsToWorkPPREInput']; // PPRECreateOneWithoutSkillsToWorkPPREInput!
+  }
+  SkillCreateWithoutSkillsToWorkPPREInput: { // input type
+    children?: NexusGenInputs['SkillCreateOneWithoutChildrenInput'] | null; // SkillCreateOneWithoutChildrenInput
+    id?: string | null; // ID
+    name: string; // String!
+    parent: NexusGenInputs['SkillCreateOneWithoutParentInput']; // SkillCreateOneWithoutParentInput!
+    pPRECheckup?: NexusGenInputs['PPRECheckupCreateOneWithoutPPRECheckupInput'] | null; // PPRECheckupCreateOneWithoutPPRECheckupInput
+    school: NexusGenInputs['SchoolCreateOneWithoutSchoolInput']; // SchoolCreateOneWithoutSchoolInput!
+    skillsConcernedPPRE: NexusGenInputs['PPRECreateOneWithoutSkillsConcernedPPREInput']; // PPRECreateOneWithoutSkillsConcernedPPREInput!
+  }
+  SkillWhereUniqueInput: { // input type
+    id?: string | null; // ID
+  }
+  StudentClassYearCreateManyWithoutStudentsClassYearsInput: { // input type
+    connect?: NexusGenInputs['StudentClassYearWhereUniqueInput'][] | null; // [StudentClassYearWhereUniqueInput!]
+    create?: NexusGenInputs['StudentClassYearCreateWithoutSchoolInput'][] | null; // [StudentClassYearCreateWithoutSchoolInput!]
+  }
+  StudentClassYearCreateOneWithoutStudentsClassYearInput: { // input type
+    connect?: NexusGenInputs['StudentClassYearWhereUniqueInput'] | null; // StudentClassYearWhereUniqueInput
+    create?: NexusGenInputs['StudentClassYearCreateWithoutPpreInput'] | null; // StudentClassYearCreateWithoutPpreInput
+  }
+  StudentClassYearCreateWithoutPpreInput: { // input type
     classroom: NexusGenInputs['ClassroomCreateOneWithoutClassroomInput']; // ClassroomCreateOneWithoutClassroomInput!
     id?: string | null; // ID
     school: NexusGenInputs['SchoolCreateOneWithoutSchoolInput']; // SchoolCreateOneWithoutSchoolInput!
     student: NexusGenInputs['StudentCreateOneWithoutStudentInput']; // StudentCreateOneWithoutStudentInput!
     year: any; // DateTime!
   }
-  SchoolYearCreateWithoutSchoolInput: { // input type
+  StudentClassYearCreateWithoutSchoolInput: { // input type
     classroom: NexusGenInputs['ClassroomCreateOneWithoutClassroomInput']; // ClassroomCreateOneWithoutClassroomInput!
     id?: string | null; // ID
     ppre?: NexusGenInputs['PPRECreateOneWithoutPpreInput'] | null; // PPRECreateOneWithoutPpreInput
     student: NexusGenInputs['StudentCreateOneWithoutStudentInput']; // StudentCreateOneWithoutStudentInput!
     year: any; // DateTime!
   }
-  SchoolYearWhereUniqueInput: { // input type
-    id?: string | null; // ID
-  }
-  SkillCreateManyWithoutSkillsInput: { // input type
-    connect?: NexusGenInputs['SkillWhereUniqueInput'][] | null; // [SkillWhereUniqueInput!]
-    create?: NexusGenInputs['SkillCreateWithoutPpreInput'][] | null; // [SkillCreateWithoutPpreInput!]
-  }
-  SkillCreateOneWithoutParentInput: { // input type
-    connect?: NexusGenInputs['SkillWhereUniqueInput'] | null; // SkillWhereUniqueInput
-    create?: NexusGenInputs['SkillCreateWithoutSkillInput'] | null; // SkillCreateWithoutSkillInput
-  }
-  SkillCreateOneWithoutSkillInput: { // input type
-    connect?: NexusGenInputs['SkillWhereUniqueInput'] | null; // SkillWhereUniqueInput
-    create?: NexusGenInputs['SkillCreateWithoutParentInput'] | null; // SkillCreateWithoutParentInput
-  }
-  SkillCreateOneWithoutSkillWorkedInput: { // input type
-    connect?: NexusGenInputs['SkillWhereUniqueInput'] | null; // SkillWhereUniqueInput
-    create?: NexusGenInputs['SkillCreateWithoutPpreCheckupInput'] | null; // SkillCreateWithoutPpreCheckupInput
-  }
-  SkillCreateWithoutParentInput: { // input type
-    id?: string | null; // ID
-    name: string; // String!
-    ppre?: NexusGenInputs['PPRECreateManyWithoutPpreInput'] | null; // PPRECreateManyWithoutPpreInput
-    ppreCheckup?: NexusGenInputs['PPRECheckupCreateManyWithoutPpreCheckupInput'] | null; // PPRECheckupCreateManyWithoutPpreCheckupInput
-    skill?: NexusGenInputs['SkillCreateOneWithoutSkillInput'] | null; // SkillCreateOneWithoutSkillInput
-  }
-  SkillCreateWithoutPpreCheckupInput: { // input type
-    id?: string | null; // ID
-    name: string; // String!
-    parent?: NexusGenInputs['SkillCreateOneWithoutParentInput'] | null; // SkillCreateOneWithoutParentInput
-    ppre?: NexusGenInputs['PPRECreateManyWithoutPpreInput'] | null; // PPRECreateManyWithoutPpreInput
-    skill?: NexusGenInputs['SkillCreateOneWithoutSkillInput'] | null; // SkillCreateOneWithoutSkillInput
-  }
-  SkillCreateWithoutPpreInput: { // input type
-    id?: string | null; // ID
-    name: string; // String!
-    parent?: NexusGenInputs['SkillCreateOneWithoutParentInput'] | null; // SkillCreateOneWithoutParentInput
-    ppreCheckup?: NexusGenInputs['PPRECheckupCreateManyWithoutPpreCheckupInput'] | null; // PPRECheckupCreateManyWithoutPpreCheckupInput
-    skill?: NexusGenInputs['SkillCreateOneWithoutSkillInput'] | null; // SkillCreateOneWithoutSkillInput
-  }
-  SkillCreateWithoutSkillInput: { // input type
-    id?: string | null; // ID
-    name: string; // String!
-    parent?: NexusGenInputs['SkillCreateOneWithoutParentInput'] | null; // SkillCreateOneWithoutParentInput
-    ppre?: NexusGenInputs['PPRECreateManyWithoutPpreInput'] | null; // PPRECreateManyWithoutPpreInput
-    ppreCheckup?: NexusGenInputs['PPRECheckupCreateManyWithoutPpreCheckupInput'] | null; // PPRECheckupCreateManyWithoutPpreCheckupInput
-  }
-  SkillWhereUniqueInput: { // input type
+  StudentClassYearWhereUniqueInput: { // input type
     id?: string | null; // ID
   }
   StudentCreateOneWithoutStudentInput: { // input type
     connect?: NexusGenInputs['StudentWhereUniqueInput'] | null; // StudentWhereUniqueInput
-    create?: NexusGenInputs['StudentCreateWithoutSchoolYearsInput'] | null; // StudentCreateWithoutSchoolYearsInput
+    create?: NexusGenInputs['StudentCreateWithoutClassYearsInput'] | null; // StudentCreateWithoutClassYearsInput
   }
-  StudentCreateWithoutSchoolYearsInput: { // input type
+  StudentCreateWithoutClassYearsInput: { // input type
     birthDate: any; // DateTime!
     firstName: string; // String!
     gender: NexusGenEnums['Gender']; // Gender!
@@ -226,16 +279,26 @@ export interface NexusGenInputs {
     create?: NexusGenInputs['TeacherCreateWithoutSchoolInput'][] | null; // [TeacherCreateWithoutSchoolInput!]
   }
   TeacherCreateWithoutSchoolInput: { // input type
-    classroom?: NexusGenInputs['ClassroomCreateOneWithoutClassroomInput'] | null; // ClassroomCreateOneWithoutClassroomInput
+    avatar?: string | null; // String
+    classrooms?: NexusGenInputs['ClassroomCreateManyWithoutClassroomsInput'] | null; // ClassroomCreateManyWithoutClassroomsInput
+    email: string; // String!
     firstName: string; // String!
     id?: string | null; // ID
     lastName: string; // String!
     password: string; // String!
-    role?: NexusGenEnums['Role'] | null; // Role
+    role: NexusGenEnums['Role']; // Role!
     username: string; // String!
   }
   TeacherWhereUniqueInput: { // input type
+    email?: string | null; // String
     id?: string | null; // ID
+    username?: string | null; // String
+  }
+  UpdateOneTeacherInput: { // input type
+    avatar?: string | null; // String
+    email?: string | null; // String
+    firstName?: string | null; // String
+    lastName?: string | null; // String
     username?: string | null; // String
   }
 }
@@ -248,7 +311,6 @@ export interface NexusGenEnums {
 }
 
 export interface NexusGenRootTypes {
-  AcademicLevel: photon.AcademicLevel;
   AuthPayload: { // root type
     teacher: NexusGenRootTypes['Teacher']; // Teacher!
     token: string; // String!
@@ -259,9 +321,9 @@ export interface NexusGenRootTypes {
   PPRECheckup: photon.PPRECheckup;
   Query: {};
   School: photon.School;
-  SchoolYear: photon.SchoolYear;
   Skill: photon.Skill;
   Student: photon.Student;
+  StudentClassYear: photon.StudentClassYear;
   Teacher: photon.Teacher;
   String: string;
   Int: number;
@@ -272,49 +334,54 @@ export interface NexusGenRootTypes {
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
-  AcademicLevelCreateInput: NexusGenInputs['AcademicLevelCreateInput'];
-  AcademicLevelCreateOneWithoutAcademicLevelInput: NexusGenInputs['AcademicLevelCreateOneWithoutAcademicLevelInput'];
-  AcademicLevelCreateWithoutClassroomsInput: NexusGenInputs['AcademicLevelCreateWithoutClassroomsInput'];
-  AcademicLevelWhereUniqueInput: NexusGenInputs['AcademicLevelWhereUniqueInput'];
+  ClassroomCreateInput: NexusGenInputs['ClassroomCreateInput'];
   ClassroomCreateManyWithoutClassroomsInput: NexusGenInputs['ClassroomCreateManyWithoutClassroomsInput'];
   ClassroomCreateOneWithoutClassroomInput: NexusGenInputs['ClassroomCreateOneWithoutClassroomInput'];
-  ClassroomCreateWithoutSchoolInput: NexusGenInputs['ClassroomCreateWithoutSchoolInput'];
+  ClassroomCreateWithoutStudentsClassYearsInput: NexusGenInputs['ClassroomCreateWithoutStudentsClassYearsInput'];
   ClassroomCreateWithoutTeachersInput: NexusGenInputs['ClassroomCreateWithoutTeachersInput'];
+  ClassroomUpdateInput: NexusGenInputs['ClassroomUpdateInput'];
   ClassroomWhereUniqueInput: NexusGenInputs['ClassroomWhereUniqueInput'];
   PPRECheckupCreateManyWithoutCheckupsInput: NexusGenInputs['PPRECheckupCreateManyWithoutCheckupsInput'];
-  PPRECheckupCreateManyWithoutPpreCheckupInput: NexusGenInputs['PPRECheckupCreateManyWithoutPpreCheckupInput'];
+  PPRECheckupCreateOneWithoutPPRECheckupInput: NexusGenInputs['PPRECheckupCreateOneWithoutPPRECheckupInput'];
   PPRECheckupCreateWithoutPpreInput: NexusGenInputs['PPRECheckupCreateWithoutPpreInput'];
   PPRECheckupCreateWithoutSkillWorkedInput: NexusGenInputs['PPRECheckupCreateWithoutSkillWorkedInput'];
   PPRECheckupWhereUniqueInput: NexusGenInputs['PPRECheckupWhereUniqueInput'];
-  PPRECreateManyWithoutPpreInput: NexusGenInputs['PPRECreateManyWithoutPpreInput'];
   PPRECreateOneWithoutPpreInput: NexusGenInputs['PPRECreateOneWithoutPpreInput'];
-  PPRECreateWithoutSchoolYearInput: NexusGenInputs['PPRECreateWithoutSchoolYearInput'];
-  PPRECreateWithoutSkillsInput: NexusGenInputs['PPRECreateWithoutSkillsInput'];
+  PPRECreateOneWithoutSkillsConcernedPPREInput: NexusGenInputs['PPRECreateOneWithoutSkillsConcernedPPREInput'];
+  PPRECreateOneWithoutSkillsToWorkPPREInput: NexusGenInputs['PPRECreateOneWithoutSkillsToWorkPPREInput'];
+  PPRECreateWithoutSkillsConcernedInput: NexusGenInputs['PPRECreateWithoutSkillsConcernedInput'];
+  PPRECreateWithoutSkillsToWorkInput: NexusGenInputs['PPRECreateWithoutSkillsToWorkInput'];
+  PPRECreateWithoutStudentsClassYearInput: NexusGenInputs['PPRECreateWithoutStudentsClassYearInput'];
   PPREWhereUniqueInput: NexusGenInputs['PPREWhereUniqueInput'];
   SchoolCreateInput: NexusGenInputs['SchoolCreateInput'];
   SchoolCreateOneWithoutSchoolInput: NexusGenInputs['SchoolCreateOneWithoutSchoolInput'];
   SchoolCreateWithoutClassroomsInput: NexusGenInputs['SchoolCreateWithoutClassroomsInput'];
   SchoolWhereUniqueInput: NexusGenInputs['SchoolWhereUniqueInput'];
-  SchoolYearCreateManyWithoutSchoolYearsInput: NexusGenInputs['SchoolYearCreateManyWithoutSchoolYearsInput'];
-  SchoolYearCreateOneWithoutSchoolYearInput: NexusGenInputs['SchoolYearCreateOneWithoutSchoolYearInput'];
-  SchoolYearCreateWithoutPpreInput: NexusGenInputs['SchoolYearCreateWithoutPpreInput'];
-  SchoolYearCreateWithoutSchoolInput: NexusGenInputs['SchoolYearCreateWithoutSchoolInput'];
-  SchoolYearWhereUniqueInput: NexusGenInputs['SchoolYearWhereUniqueInput'];
+  SkillCreateManyWithoutSkillWorkedInput: NexusGenInputs['SkillCreateManyWithoutSkillWorkedInput'];
+  SkillCreateManyWithoutSkillsConcernedInput: NexusGenInputs['SkillCreateManyWithoutSkillsConcernedInput'];
   SkillCreateManyWithoutSkillsInput: NexusGenInputs['SkillCreateManyWithoutSkillsInput'];
+  SkillCreateManyWithoutSkillsToWorkInput: NexusGenInputs['SkillCreateManyWithoutSkillsToWorkInput'];
+  SkillCreateOneWithoutChildrenInput: NexusGenInputs['SkillCreateOneWithoutChildrenInput'];
   SkillCreateOneWithoutParentInput: NexusGenInputs['SkillCreateOneWithoutParentInput'];
-  SkillCreateOneWithoutSkillInput: NexusGenInputs['SkillCreateOneWithoutSkillInput'];
-  SkillCreateOneWithoutSkillWorkedInput: NexusGenInputs['SkillCreateOneWithoutSkillWorkedInput'];
+  SkillCreateWithoutChildrenInput: NexusGenInputs['SkillCreateWithoutChildrenInput'];
+  SkillCreateWithoutPPRECheckupInput: NexusGenInputs['SkillCreateWithoutPPRECheckupInput'];
   SkillCreateWithoutParentInput: NexusGenInputs['SkillCreateWithoutParentInput'];
-  SkillCreateWithoutPpreCheckupInput: NexusGenInputs['SkillCreateWithoutPpreCheckupInput'];
-  SkillCreateWithoutPpreInput: NexusGenInputs['SkillCreateWithoutPpreInput'];
-  SkillCreateWithoutSkillInput: NexusGenInputs['SkillCreateWithoutSkillInput'];
+  SkillCreateWithoutSchoolInput: NexusGenInputs['SkillCreateWithoutSchoolInput'];
+  SkillCreateWithoutSkillsConcernedPPREInput: NexusGenInputs['SkillCreateWithoutSkillsConcernedPPREInput'];
+  SkillCreateWithoutSkillsToWorkPPREInput: NexusGenInputs['SkillCreateWithoutSkillsToWorkPPREInput'];
   SkillWhereUniqueInput: NexusGenInputs['SkillWhereUniqueInput'];
+  StudentClassYearCreateManyWithoutStudentsClassYearsInput: NexusGenInputs['StudentClassYearCreateManyWithoutStudentsClassYearsInput'];
+  StudentClassYearCreateOneWithoutStudentsClassYearInput: NexusGenInputs['StudentClassYearCreateOneWithoutStudentsClassYearInput'];
+  StudentClassYearCreateWithoutPpreInput: NexusGenInputs['StudentClassYearCreateWithoutPpreInput'];
+  StudentClassYearCreateWithoutSchoolInput: NexusGenInputs['StudentClassYearCreateWithoutSchoolInput'];
+  StudentClassYearWhereUniqueInput: NexusGenInputs['StudentClassYearWhereUniqueInput'];
   StudentCreateOneWithoutStudentInput: NexusGenInputs['StudentCreateOneWithoutStudentInput'];
-  StudentCreateWithoutSchoolYearsInput: NexusGenInputs['StudentCreateWithoutSchoolYearsInput'];
+  StudentCreateWithoutClassYearsInput: NexusGenInputs['StudentCreateWithoutClassYearsInput'];
   StudentWhereUniqueInput: NexusGenInputs['StudentWhereUniqueInput'];
   TeacherCreateManyWithoutTeachersInput: NexusGenInputs['TeacherCreateManyWithoutTeachersInput'];
   TeacherCreateWithoutSchoolInput: NexusGenInputs['TeacherCreateWithoutSchoolInput'];
   TeacherWhereUniqueInput: NexusGenInputs['TeacherWhereUniqueInput'];
+  UpdateOneTeacherInput: NexusGenInputs['UpdateOneTeacherInput'];
   Gender: NexusGenEnums['Gender'];
   PPRENature: NexusGenEnums['PPRENature'];
   Role: NexusGenEnums['Role'];
@@ -322,27 +389,30 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 }
 
 export interface NexusGenFieldTypes {
-  AcademicLevel: { // field return type
-    classrooms: NexusGenRootTypes['Classroom'][] | null; // [Classroom!]
-    id: string; // ID!
-    name: string; // String!
-  }
   AuthPayload: { // field return type
     teacher: NexusGenRootTypes['Teacher']; // Teacher!
     token: string; // String!
   }
   Classroom: { // field return type
-    academicLevel: NexusGenRootTypes['AcademicLevel']; // AcademicLevel!
+    academicLevel: string; // String!
+    createdAt: any; // DateTime!
     id: string; // ID!
+    name: string; // String!
     school: NexusGenRootTypes['School']; // School!
-    schoolYears: NexusGenRootTypes['SchoolYear'][] | null; // [SchoolYear!]
+    studentsClassYears: NexusGenRootTypes['StudentClassYear'][] | null; // [StudentClassYear!]
     teachers: NexusGenRootTypes['Teacher'][] | null; // [Teacher!]
+    updatedAt: any; // DateTime!
+    year: string; // String!
   }
   Mutation: { // field return type
-    createOneAcademicLevel: NexusGenRootTypes['AcademicLevel']; // AcademicLevel!
+    createOneClassroom: NexusGenRootTypes['Classroom']; // Classroom!
     createOneSchool: NexusGenRootTypes['School']; // School!
     createOneTeacher: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    deleteOneClassroom: NexusGenRootTypes['Classroom']; // Classroom!
+    deleteOneTeacher: NexusGenRootTypes['Teacher']; // Teacher!
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    updateOneClassroom: NexusGenRootTypes['Classroom']; // Classroom!
+    updateOneTeacher: NexusGenRootTypes['Teacher']; // Teacher!
   }
   PPRE: { // field return type
     checkups: NexusGenRootTypes['PPRECheckup'][] | null; // [PPRECheckup!]
@@ -351,8 +421,9 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     nature: NexusGenEnums['PPRENature']; // PPRENature!
     schoolAttendance: NexusGenEnums['SchoolAttendance']; // SchoolAttendance!
-    schoolYear: NexusGenRootTypes['SchoolYear']; // SchoolYear!
-    skills: NexusGenRootTypes['Skill'][] | null; // [Skill!]
+    skillsConcerned: NexusGenRootTypes['Skill'][] | null; // [Skill!]
+    skillsToWork: NexusGenRootTypes['Skill'][] | null; // [Skill!]
+    studentsClassYear: NexusGenRootTypes['StudentClassYear']; // StudentClassYear!
     updatedAt: any; // DateTime!
   }
   PPRECheckup: { // field return type
@@ -360,24 +431,47 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     phase: number; // Int!
     ppre: NexusGenRootTypes['PPRE']; // PPRE!
-    skillWorked: NexusGenRootTypes['Skill']; // Skill!
+    skillWorked: NexusGenRootTypes['Skill'][] | null; // [Skill!]
   }
   Query: { // field return type
-    findManyAcademicLevel: NexusGenRootTypes['AcademicLevel'][] | null; // [AcademicLevel!]
+    findManyClassroom: NexusGenRootTypes['Classroom'][] | null; // [Classroom!]
+    findManySchool: NexusGenRootTypes['School'][] | null; // [School!]
     findManyTeacher: NexusGenRootTypes['Teacher'][] | null; // [Teacher!]
-    findOneAcademicLevel: NexusGenRootTypes['AcademicLevel'] | null; // AcademicLevel
     findOneSchool: NexusGenRootTypes['School'] | null; // School
+    findOneTeacher: NexusGenRootTypes['Teacher'] | null; // Teacher
   }
   School: { // field return type
     classrooms: NexusGenRootTypes['Classroom'][] | null; // [Classroom!]
+    createdAt: any; // DateTime!
     id: string; // ID!
     name: string; // String!
     phone: string; // String!
-    schoolYears: NexusGenRootTypes['SchoolYear'][] | null; // [SchoolYear!]
+    skills: NexusGenRootTypes['Skill'][] | null; // [Skill!]
+    studentsClassYears: NexusGenRootTypes['StudentClassYear'][] | null; // [StudentClassYear!]
     teachers: NexusGenRootTypes['Teacher'][] | null; // [Teacher!]
-    website: string | null; // String
+    updatedAt: any; // DateTime!
+    webstite: string | null; // String
   }
-  SchoolYear: { // field return type
+  Skill: { // field return type
+    children: NexusGenRootTypes['Skill'] | null; // Skill
+    id: string; // ID!
+    name: string; // String!
+    parent: NexusGenRootTypes['Skill']; // Skill!
+    school: NexusGenRootTypes['School']; // School!
+    skillsConcernedPPRE: NexusGenRootTypes['PPRE']; // PPRE!
+    skillsToWorkPPRE: NexusGenRootTypes['PPRE']; // PPRE!
+  }
+  Student: { // field return type
+    birthDate: any; // DateTime!
+    classYears: NexusGenRootTypes['StudentClassYear'][] | null; // [StudentClassYear!]
+    firstName: string; // String!
+    gender: NexusGenEnums['Gender']; // Gender!
+    id: string; // ID!
+    lastName: string; // String!
+    password: string; // String!
+    username: string; // String!
+  }
+  StudentClassYear: { // field return type
     classroom: NexusGenRootTypes['Classroom']; // Classroom!
     id: string; // ID!
     ppre: NexusGenRootTypes['PPRE'] | null; // PPRE
@@ -385,46 +479,25 @@ export interface NexusGenFieldTypes {
     student: NexusGenRootTypes['Student']; // Student!
     year: any; // DateTime!
   }
-  Skill: { // field return type
-    id: string; // ID!
-    name: string; // String!
-    parent: NexusGenRootTypes['Skill'] | null; // Skill
-    ppre: NexusGenRootTypes['PPRE'][] | null; // [PPRE!]
-    ppreCheckup: NexusGenRootTypes['PPRECheckup'][] | null; // [PPRECheckup!]
-    skill: NexusGenRootTypes['Skill'] | null; // Skill
-  }
-  Student: { // field return type
-    birthDate: any; // DateTime!
-    firstName: string; // String!
-    gender: NexusGenEnums['Gender']; // Gender!
-    id: string; // ID!
-    lastName: string; // String!
-    schoolYears: NexusGenRootTypes['SchoolYear'][] | null; // [SchoolYear!]
-    username: string; // String!
-  }
   Teacher: { // field return type
-    classroom: NexusGenRootTypes['Classroom'] | null; // Classroom
+    avatar: string | null; // String
+    classrooms: NexusGenRootTypes['Classroom'][] | null; // [Classroom!]
+    createdAt: any; // DateTime!
+    email: string; // String!
     firstName: string; // String!
     id: string; // ID!
     lastName: string; // String!
+    password: string; // String!
     role: NexusGenEnums['Role']; // Role!
     school: NexusGenRootTypes['School']; // School!
+    updatedAt: any; // DateTime!
     username: string; // String!
   }
 }
 
 export interface NexusGenArgTypes {
-  AcademicLevel: {
-    classrooms: { // args
-      after?: string | null; // String
-      before?: string | null; // String
-      first?: number | null; // Int
-      last?: number | null; // Int
-      skip?: number | null; // Int
-    }
-  }
   Classroom: {
-    schoolYears: { // args
+    studentsClassYears: { // args
       after?: string | null; // String
       before?: string | null; // String
       first?: number | null; // Int
@@ -440,13 +513,15 @@ export interface NexusGenArgTypes {
     }
   }
   Mutation: {
-    createOneAcademicLevel: { // args
-      data: NexusGenInputs['AcademicLevelCreateInput']; // AcademicLevelCreateInput!
+    createOneClassroom: { // args
+      data: NexusGenInputs['ClassroomCreateInput']; // ClassroomCreateInput!
     }
     createOneSchool: { // args
       data: NexusGenInputs['SchoolCreateInput']; // SchoolCreateInput!
     }
     createOneTeacher: { // args
+      avatar?: string | null; // String
+      email?: string | null; // String
       firstName?: string | null; // String
       lastName?: string | null; // String
       password?: string | null; // String
@@ -454,9 +529,23 @@ export interface NexusGenArgTypes {
       school?: NexusGenInputs['SchoolWhereUniqueInput'] | null; // SchoolWhereUniqueInput
       username?: string | null; // String
     }
+    deleteOneClassroom: { // args
+      where?: NexusGenInputs['ClassroomWhereUniqueInput'] | null; // ClassroomWhereUniqueInput
+    }
+    deleteOneTeacher: { // args
+      where?: NexusGenInputs['TeacherWhereUniqueInput'] | null; // TeacherWhereUniqueInput
+    }
     login: { // args
       password?: string | null; // String
       teacher?: NexusGenInputs['TeacherWhereUniqueInput'] | null; // TeacherWhereUniqueInput
+    }
+    updateOneClassroom: { // args
+      data?: NexusGenInputs['ClassroomUpdateInput'] | null; // ClassroomUpdateInput
+      where?: NexusGenInputs['ClassroomWhereUniqueInput'] | null; // ClassroomWhereUniqueInput
+    }
+    updateOneTeacher: { // args
+      data?: NexusGenInputs['UpdateOneTeacherInput'] | null; // UpdateOneTeacherInput
+      where?: NexusGenInputs['TeacherWhereUniqueInput'] | null; // TeacherWhereUniqueInput
     }
   }
   PPRE: {
@@ -467,7 +556,23 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       skip?: number | null; // Int
     }
-    skills: { // args
+    skillsConcerned: { // args
+      after?: string | null; // String
+      before?: string | null; // String
+      first?: number | null; // Int
+      last?: number | null; // Int
+      skip?: number | null; // Int
+    }
+    skillsToWork: { // args
+      after?: string | null; // String
+      before?: string | null; // String
+      first?: number | null; // Int
+      last?: number | null; // Int
+      skip?: number | null; // Int
+    }
+  }
+  PPRECheckup: {
+    skillWorked: { // args
       after?: string | null; // String
       before?: string | null; // String
       first?: number | null; // Int
@@ -476,7 +581,14 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
-    findManyAcademicLevel: { // args
+    findManyClassroom: { // args
+      after?: string | null; // String
+      before?: string | null; // String
+      first?: number | null; // Int
+      last?: number | null; // Int
+      skip?: number | null; // Int
+    }
+    findManySchool: { // args
       after?: string | null; // String
       before?: string | null; // String
       first?: number | null; // Int
@@ -490,11 +602,11 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       skip?: number | null; // Int
     }
-    findOneAcademicLevel: { // args
-      where: NexusGenInputs['AcademicLevelWhereUniqueInput']; // AcademicLevelWhereUniqueInput!
-    }
     findOneSchool: { // args
       where: NexusGenInputs['SchoolWhereUniqueInput']; // SchoolWhereUniqueInput!
+    }
+    findOneTeacher: { // args
+      where: NexusGenInputs['TeacherWhereUniqueInput']; // TeacherWhereUniqueInput!
     }
   }
   School: {
@@ -505,7 +617,14 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       skip?: number | null; // Int
     }
-    schoolYears: { // args
+    skills: { // args
+      after?: string | null; // String
+      before?: string | null; // String
+      first?: number | null; // Int
+      last?: number | null; // Int
+      skip?: number | null; // Int
+    }
+    studentsClassYears: { // args
       after?: string | null; // String
       before?: string | null; // String
       first?: number | null; // Int
@@ -520,15 +639,8 @@ export interface NexusGenArgTypes {
       skip?: number | null; // Int
     }
   }
-  Skill: {
-    ppre: { // args
-      after?: string | null; // String
-      before?: string | null; // String
-      first?: number | null; // Int
-      last?: number | null; // Int
-      skip?: number | null; // Int
-    }
-    ppreCheckup: { // args
+  Student: {
+    classYears: { // args
       after?: string | null; // String
       before?: string | null; // String
       first?: number | null; // Int
@@ -536,8 +648,8 @@ export interface NexusGenArgTypes {
       skip?: number | null; // Int
     }
   }
-  Student: {
-    schoolYears: { // args
+  Teacher: {
+    classrooms: { // args
       after?: string | null; // String
       before?: string | null; // String
       first?: number | null; // Int
@@ -552,9 +664,9 @@ export interface NexusGenAbstractResolveReturnTypes {
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = "AcademicLevel" | "AuthPayload" | "Classroom" | "Mutation" | "PPRE" | "PPRECheckup" | "Query" | "School" | "SchoolYear" | "Skill" | "Student" | "Teacher";
+export type NexusGenObjectNames = "AuthPayload" | "Classroom" | "Mutation" | "PPRE" | "PPRECheckup" | "Query" | "School" | "Skill" | "Student" | "StudentClassYear" | "Teacher";
 
-export type NexusGenInputNames = "AcademicLevelCreateInput" | "AcademicLevelCreateOneWithoutAcademicLevelInput" | "AcademicLevelCreateWithoutClassroomsInput" | "AcademicLevelWhereUniqueInput" | "ClassroomCreateManyWithoutClassroomsInput" | "ClassroomCreateOneWithoutClassroomInput" | "ClassroomCreateWithoutSchoolInput" | "ClassroomCreateWithoutTeachersInput" | "ClassroomWhereUniqueInput" | "PPRECheckupCreateManyWithoutCheckupsInput" | "PPRECheckupCreateManyWithoutPpreCheckupInput" | "PPRECheckupCreateWithoutPpreInput" | "PPRECheckupCreateWithoutSkillWorkedInput" | "PPRECheckupWhereUniqueInput" | "PPRECreateManyWithoutPpreInput" | "PPRECreateOneWithoutPpreInput" | "PPRECreateWithoutSchoolYearInput" | "PPRECreateWithoutSkillsInput" | "PPREWhereUniqueInput" | "SchoolCreateInput" | "SchoolCreateOneWithoutSchoolInput" | "SchoolCreateWithoutClassroomsInput" | "SchoolWhereUniqueInput" | "SchoolYearCreateManyWithoutSchoolYearsInput" | "SchoolYearCreateOneWithoutSchoolYearInput" | "SchoolYearCreateWithoutPpreInput" | "SchoolYearCreateWithoutSchoolInput" | "SchoolYearWhereUniqueInput" | "SkillCreateManyWithoutSkillsInput" | "SkillCreateOneWithoutParentInput" | "SkillCreateOneWithoutSkillInput" | "SkillCreateOneWithoutSkillWorkedInput" | "SkillCreateWithoutParentInput" | "SkillCreateWithoutPpreCheckupInput" | "SkillCreateWithoutPpreInput" | "SkillCreateWithoutSkillInput" | "SkillWhereUniqueInput" | "StudentCreateOneWithoutStudentInput" | "StudentCreateWithoutSchoolYearsInput" | "StudentWhereUniqueInput" | "TeacherCreateManyWithoutTeachersInput" | "TeacherCreateWithoutSchoolInput" | "TeacherWhereUniqueInput";
+export type NexusGenInputNames = "ClassroomCreateInput" | "ClassroomCreateManyWithoutClassroomsInput" | "ClassroomCreateOneWithoutClassroomInput" | "ClassroomCreateWithoutStudentsClassYearsInput" | "ClassroomCreateWithoutTeachersInput" | "ClassroomUpdateInput" | "ClassroomWhereUniqueInput" | "PPRECheckupCreateManyWithoutCheckupsInput" | "PPRECheckupCreateOneWithoutPPRECheckupInput" | "PPRECheckupCreateWithoutPpreInput" | "PPRECheckupCreateWithoutSkillWorkedInput" | "PPRECheckupWhereUniqueInput" | "PPRECreateOneWithoutPpreInput" | "PPRECreateOneWithoutSkillsConcernedPPREInput" | "PPRECreateOneWithoutSkillsToWorkPPREInput" | "PPRECreateWithoutSkillsConcernedInput" | "PPRECreateWithoutSkillsToWorkInput" | "PPRECreateWithoutStudentsClassYearInput" | "PPREWhereUniqueInput" | "SchoolCreateInput" | "SchoolCreateOneWithoutSchoolInput" | "SchoolCreateWithoutClassroomsInput" | "SchoolWhereUniqueInput" | "SkillCreateManyWithoutSkillWorkedInput" | "SkillCreateManyWithoutSkillsConcernedInput" | "SkillCreateManyWithoutSkillsInput" | "SkillCreateManyWithoutSkillsToWorkInput" | "SkillCreateOneWithoutChildrenInput" | "SkillCreateOneWithoutParentInput" | "SkillCreateWithoutChildrenInput" | "SkillCreateWithoutPPRECheckupInput" | "SkillCreateWithoutParentInput" | "SkillCreateWithoutSchoolInput" | "SkillCreateWithoutSkillsConcernedPPREInput" | "SkillCreateWithoutSkillsToWorkPPREInput" | "SkillWhereUniqueInput" | "StudentClassYearCreateManyWithoutStudentsClassYearsInput" | "StudentClassYearCreateOneWithoutStudentsClassYearInput" | "StudentClassYearCreateWithoutPpreInput" | "StudentClassYearCreateWithoutSchoolInput" | "StudentClassYearWhereUniqueInput" | "StudentCreateOneWithoutStudentInput" | "StudentCreateWithoutClassYearsInput" | "StudentWhereUniqueInput" | "TeacherCreateManyWithoutTeachersInput" | "TeacherCreateWithoutSchoolInput" | "TeacherWhereUniqueInput" | "UpdateOneTeacherInput";
 
 export type NexusGenEnumNames = "Gender" | "PPRENature" | "Role" | "SchoolAttendance";
 

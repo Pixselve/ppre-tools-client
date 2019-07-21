@@ -4,13 +4,14 @@ export const PPRE = objectType({
   name: 'PPRE',
   definition(t) {
     t.model.id();
-    t.model.checkups();
-    t.model.createdAt();
+    t.model.studentsClassYear();
     t.model.globalAssessment();
-    t.model.nature();
+    t.model.createdAt();
     t.model.updatedAt();
-    t.model.skills();
+    t.model.nature();
     t.model.schoolAttendance();
-    t.model.schoolYear();
+    t.model.checkups();
+    t.model.skillsConcerned();
+    t.model.skillsToWork();
   },
 });

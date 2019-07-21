@@ -1,13 +1,13 @@
 import { objectType } from '@prisma/nexus';
 
-export const SchoolYear = objectType({
-  name: 'SchoolYear',
+export const StudentClassYear = objectType({
+  name: 'StudentClassYear',
   definition(t) {
     t.model.id();
-    t.model.classroom();
-    t.model.school();
     t.model.student();
+    t.model.school();
     t.model.year();
+    t.model.classroom();
     t.model.ppre();
   },
 });

@@ -2,67 +2,65 @@
 ### Do not make changes to this file directly
 
 
-type AcademicLevel {
-  classrooms(after: String, before: String, first: Int, last: Int, skip: Int): [Classroom!]
-  id: ID!
-  name: String!
-}
-
-input AcademicLevelCreateInput {
-  classrooms: ClassroomCreateManyWithoutClassroomsInput
-  id: ID
-  name: String!
-}
-
-input AcademicLevelCreateOneWithoutAcademicLevelInput {
-  connect: AcademicLevelWhereUniqueInput
-  create: AcademicLevelCreateWithoutClassroomsInput
-}
-
-input AcademicLevelCreateWithoutClassroomsInput {
-  id: ID
-  name: String!
-}
-
-input AcademicLevelWhereUniqueInput {
-  id: ID
-}
-
 type AuthPayload {
   teacher: Teacher!
   token: String!
 }
 
 type Classroom {
-  academicLevel: AcademicLevel!
+  academicLevel: String!
+  createdAt: DateTime!
   id: ID!
+  name: String!
   school: School!
-  schoolYears(after: String, before: String, first: Int, last: Int, skip: Int): [SchoolYear!]
+  studentsClassYears(after: String, before: String, first: Int, last: Int, skip: Int): [StudentClassYear!]
   teachers(after: String, before: String, first: Int, last: Int, skip: Int): [Teacher!]
+  updatedAt: DateTime!
+  year: String!
+}
+
+input ClassroomCreateInput {
+  academicLevel: String!
+  id: ID
+  name: String!
+  school: SchoolCreateOneWithoutSchoolInput!
+  studentsClassYears: StudentClassYearCreateManyWithoutStudentsClassYearsInput
+  teachers: TeacherCreateManyWithoutTeachersInput
+  year: String!
 }
 
 input ClassroomCreateManyWithoutClassroomsInput {
   connect: [ClassroomWhereUniqueInput!]
-  create: [ClassroomCreateWithoutSchoolInput!]
+  create: [ClassroomCreateWithoutTeachersInput!]
 }
 
 input ClassroomCreateOneWithoutClassroomInput {
   connect: ClassroomWhereUniqueInput
-  create: ClassroomCreateWithoutTeachersInput
+  create: ClassroomCreateWithoutStudentsClassYearsInput
 }
 
-input ClassroomCreateWithoutSchoolInput {
-  academicLevel: AcademicLevelCreateOneWithoutAcademicLevelInput!
+input ClassroomCreateWithoutStudentsClassYearsInput {
+  academicLevel: String!
   id: ID
-  schoolYears: SchoolYearCreateManyWithoutSchoolYearsInput
+  name: String!
+  school: SchoolCreateOneWithoutSchoolInput!
   teachers: TeacherCreateManyWithoutTeachersInput
+  year: String!
 }
 
 input ClassroomCreateWithoutTeachersInput {
-  academicLevel: AcademicLevelCreateOneWithoutAcademicLevelInput!
+  academicLevel: String!
   id: ID
+  name: String!
   school: SchoolCreateOneWithoutSchoolInput!
-  schoolYears: SchoolYearCreateManyWithoutSchoolYearsInput
+  studentsClassYears: StudentClassYearCreateManyWithoutStudentsClassYearsInput
+  year: String!
+}
+
+input ClassroomUpdateInput {
+  academicLevel: String
+  name: String
+  teachers: [TeacherWhereUniqueInput!]
 }
 
 input ClassroomWhereUniqueInput {
@@ -79,10 +77,14 @@ enum Gender {
 }
 
 type Mutation {
-  createOneAcademicLevel(data: AcademicLevelCreateInput!): AcademicLevel!
+  createOneClassroom(data: ClassroomCreateInput!): Classroom!
   createOneSchool(data: SchoolCreateInput!): School!
-  createOneTeacher(firstName: String, lastName: String, password: String, role: Role, school: SchoolWhereUniqueInput, username: String): AuthPayload!
+  createOneTeacher(avatar: String, email: String, firstName: String, lastName: String, password: String, role: Role, school: SchoolWhereUniqueInput, username: String): AuthPayload!
+  deleteOneClassroom(where: ClassroomWhereUniqueInput): Classroom!
+  deleteOneTeacher(where: TeacherWhereUniqueInput): Teacher!
   login(password: String, teacher: TeacherWhereUniqueInput): AuthPayload!
+  updateOneClassroom(data: ClassroomUpdateInput, where: ClassroomWhereUniqueInput): Classroom!
+  updateOneTeacher(data: UpdateOneTeacherInput, where: TeacherWhereUniqueInput): Teacher!
 }
 
 type PPRE {
@@ -92,8 +94,9 @@ type PPRE {
   id: ID!
   nature: PPRENature!
   schoolAttendance: SchoolAttendance!
-  schoolYear: SchoolYear!
-  skills(after: String, before: String, first: Int, last: Int, skip: Int): [Skill!]
+  skillsConcerned(after: String, before: String, first: Int, last: Int, skip: Int): [Skill!]
+  skillsToWork(after: String, before: String, first: Int, last: Int, skip: Int): [Skill!]
+  studentsClassYear: StudentClassYear!
   updatedAt: DateTime!
 }
 
@@ -102,7 +105,7 @@ type PPRECheckup {
   id: ID!
   phase: Int!
   ppre: PPRE!
-  skillWorked: Skill!
+  skillWorked(after: String, before: String, first: Int, last: Int, skip: Int): [Skill!]
 }
 
 input PPRECheckupCreateManyWithoutCheckupsInput {
@@ -110,16 +113,16 @@ input PPRECheckupCreateManyWithoutCheckupsInput {
   create: [PPRECheckupCreateWithoutPpreInput!]
 }
 
-input PPRECheckupCreateManyWithoutPpreCheckupInput {
-  connect: [PPRECheckupWhereUniqueInput!]
-  create: [PPRECheckupCreateWithoutSkillWorkedInput!]
+input PPRECheckupCreateOneWithoutPPRECheckupInput {
+  connect: PPRECheckupWhereUniqueInput
+  create: PPRECheckupCreateWithoutSkillWorkedInput
 }
 
 input PPRECheckupCreateWithoutPpreInput {
   assessment: String!
   id: ID
   phase: Int!
-  skillWorked: SkillCreateOneWithoutSkillWorkedInput!
+  skillWorked: SkillCreateManyWithoutSkillWorkedInput
 }
 
 input PPRECheckupCreateWithoutSkillWorkedInput {
@@ -133,32 +136,49 @@ input PPRECheckupWhereUniqueInput {
   id: ID
 }
 
-input PPRECreateManyWithoutPpreInput {
-  connect: [PPREWhereUniqueInput!]
-  create: [PPRECreateWithoutSkillsInput!]
-}
-
 input PPRECreateOneWithoutPpreInput {
   connect: PPREWhereUniqueInput
-  create: PPRECreateWithoutSchoolYearInput
+  create: PPRECreateWithoutStudentsClassYearInput
 }
 
-input PPRECreateWithoutSchoolYearInput {
+input PPRECreateOneWithoutSkillsConcernedPPREInput {
+  connect: PPREWhereUniqueInput
+  create: PPRECreateWithoutSkillsConcernedInput
+}
+
+input PPRECreateOneWithoutSkillsToWorkPPREInput {
+  connect: PPREWhereUniqueInput
+  create: PPRECreateWithoutSkillsToWorkInput
+}
+
+input PPRECreateWithoutSkillsConcernedInput {
   checkups: PPRECheckupCreateManyWithoutCheckupsInput
   globalAssessment: String
   id: ID
   nature: PPRENature!
   schoolAttendance: SchoolAttendance!
-  skills: SkillCreateManyWithoutSkillsInput
+  skillsToWork: SkillCreateManyWithoutSkillsToWorkInput
+  studentsClassYear: StudentClassYearCreateOneWithoutStudentsClassYearInput!
 }
 
-input PPRECreateWithoutSkillsInput {
+input PPRECreateWithoutSkillsToWorkInput {
   checkups: PPRECheckupCreateManyWithoutCheckupsInput
   globalAssessment: String
   id: ID
   nature: PPRENature!
   schoolAttendance: SchoolAttendance!
-  schoolYear: SchoolYearCreateOneWithoutSchoolYearInput!
+  skillsConcerned: SkillCreateManyWithoutSkillsConcernedInput
+  studentsClassYear: StudentClassYearCreateOneWithoutStudentsClassYearInput!
+}
+
+input PPRECreateWithoutStudentsClassYearInput {
+  checkups: PPRECheckupCreateManyWithoutCheckupsInput
+  globalAssessment: String
+  id: ID
+  nature: PPRENature!
+  schoolAttendance: SchoolAttendance!
+  skillsConcerned: SkillCreateManyWithoutSkillsConcernedInput
+  skillsToWork: SkillCreateManyWithoutSkillsToWorkInput
 }
 
 enum PPRENature {
@@ -172,10 +192,11 @@ input PPREWhereUniqueInput {
 }
 
 type Query {
-  findManyAcademicLevel(after: String, before: String, first: Int, last: Int, skip: Int): [AcademicLevel!]
+  findManyClassroom(after: String, before: String, first: Int, last: Int, skip: Int): [Classroom!]
+  findManySchool(after: String, before: String, first: Int, last: Int, skip: Int): [School!]
   findManyTeacher(after: String, before: String, first: Int, last: Int, skip: Int): [Teacher!]
-  findOneAcademicLevel(where: AcademicLevelWhereUniqueInput!): AcademicLevel
   findOneSchool(where: SchoolWhereUniqueInput!): School
+  findOneTeacher(where: TeacherWhereUniqueInput!): Teacher
 }
 
 enum Role {
@@ -186,12 +207,15 @@ enum Role {
 
 type School {
   classrooms(after: String, before: String, first: Int, last: Int, skip: Int): [Classroom!]
+  createdAt: DateTime!
   id: ID!
   name: String!
   phone: String!
-  schoolYears(after: String, before: String, first: Int, last: Int, skip: Int): [SchoolYear!]
+  skills(after: String, before: String, first: Int, last: Int, skip: Int): [Skill!]
+  studentsClassYears(after: String, before: String, first: Int, last: Int, skip: Int): [StudentClassYear!]
   teachers(after: String, before: String, first: Int, last: Int, skip: Int): [Teacher!]
-  website: String
+  updatedAt: DateTime!
+  webstite: String
 }
 
 enum SchoolAttendance {
@@ -206,9 +230,10 @@ input SchoolCreateInput {
   id: ID
   name: String!
   phone: String!
-  schoolYears: SchoolYearCreateManyWithoutSchoolYearsInput
+  skills: SkillCreateManyWithoutSkillsInput
+  studentsClassYears: StudentClassYearCreateManyWithoutStudentsClassYearsInput
   teachers: TeacherCreateManyWithoutTeachersInput
-  website: String
+  webstite: String
 }
 
 input SchoolCreateOneWithoutSchoolInput {
@@ -220,113 +245,114 @@ input SchoolCreateWithoutClassroomsInput {
   id: ID
   name: String!
   phone: String!
-  schoolYears: SchoolYearCreateManyWithoutSchoolYearsInput
+  skills: SkillCreateManyWithoutSkillsInput
+  studentsClassYears: StudentClassYearCreateManyWithoutStudentsClassYearsInput
   teachers: TeacherCreateManyWithoutTeachersInput
-  website: String
+  webstite: String
 }
 
 input SchoolWhereUniqueInput {
   id: ID
 }
 
-type SchoolYear {
-  classroom: Classroom!
-  id: ID!
-  ppre: PPRE
-  school: School!
-  student: Student!
-  year: DateTime!
-}
-
-input SchoolYearCreateManyWithoutSchoolYearsInput {
-  connect: [SchoolYearWhereUniqueInput!]
-  create: [SchoolYearCreateWithoutSchoolInput!]
-}
-
-input SchoolYearCreateOneWithoutSchoolYearInput {
-  connect: SchoolYearWhereUniqueInput
-  create: SchoolYearCreateWithoutPpreInput
-}
-
-input SchoolYearCreateWithoutPpreInput {
-  classroom: ClassroomCreateOneWithoutClassroomInput!
-  id: ID
-  school: SchoolCreateOneWithoutSchoolInput!
-  student: StudentCreateOneWithoutStudentInput!
-  year: DateTime!
-}
-
-input SchoolYearCreateWithoutSchoolInput {
-  classroom: ClassroomCreateOneWithoutClassroomInput!
-  id: ID
-  ppre: PPRECreateOneWithoutPpreInput
-  student: StudentCreateOneWithoutStudentInput!
-  year: DateTime!
-}
-
-input SchoolYearWhereUniqueInput {
-  id: ID
-}
-
 type Skill {
+  children: Skill
   id: ID!
   name: String!
-  parent: Skill
-  ppre(after: String, before: String, first: Int, last: Int, skip: Int): [PPRE!]
-  ppreCheckup(after: String, before: String, first: Int, last: Int, skip: Int): [PPRECheckup!]
-  skill: Skill
+  parent: Skill!
+  school: School!
+  skillsConcernedPPRE: PPRE!
+  skillsToWorkPPRE: PPRE!
+}
+
+input SkillCreateManyWithoutSkillsConcernedInput {
+  connect: [SkillWhereUniqueInput!]
+  create: [SkillCreateWithoutSkillsConcernedPPREInput!]
 }
 
 input SkillCreateManyWithoutSkillsInput {
   connect: [SkillWhereUniqueInput!]
-  create: [SkillCreateWithoutPpreInput!]
+  create: [SkillCreateWithoutSchoolInput!]
 }
 
-input SkillCreateOneWithoutParentInput {
-  connect: SkillWhereUniqueInput
-  create: SkillCreateWithoutSkillInput
+input SkillCreateManyWithoutSkillsToWorkInput {
+  connect: [SkillWhereUniqueInput!]
+  create: [SkillCreateWithoutSkillsToWorkPPREInput!]
 }
 
-input SkillCreateOneWithoutSkillInput {
+input SkillCreateManyWithoutSkillWorkedInput {
+  connect: [SkillWhereUniqueInput!]
+  create: [SkillCreateWithoutPPRECheckupInput!]
+}
+
+input SkillCreateOneWithoutChildrenInput {
   connect: SkillWhereUniqueInput
   create: SkillCreateWithoutParentInput
 }
 
-input SkillCreateOneWithoutSkillWorkedInput {
+input SkillCreateOneWithoutParentInput {
   connect: SkillWhereUniqueInput
-  create: SkillCreateWithoutPpreCheckupInput
+  create: SkillCreateWithoutChildrenInput
+}
+
+input SkillCreateWithoutChildrenInput {
+  id: ID
+  name: String!
+  parent: SkillCreateOneWithoutParentInput!
+  pPRECheckup: PPRECheckupCreateOneWithoutPPRECheckupInput
+  school: SchoolCreateOneWithoutSchoolInput!
+  skillsConcernedPPRE: PPRECreateOneWithoutSkillsConcernedPPREInput!
+  skillsToWorkPPRE: PPRECreateOneWithoutSkillsToWorkPPREInput!
 }
 
 input SkillCreateWithoutParentInput {
+  children: SkillCreateOneWithoutChildrenInput
   id: ID
   name: String!
-  ppre: PPRECreateManyWithoutPpreInput
-  ppreCheckup: PPRECheckupCreateManyWithoutPpreCheckupInput
-  skill: SkillCreateOneWithoutSkillInput
+  pPRECheckup: PPRECheckupCreateOneWithoutPPRECheckupInput
+  school: SchoolCreateOneWithoutSchoolInput!
+  skillsConcernedPPRE: PPRECreateOneWithoutSkillsConcernedPPREInput!
+  skillsToWorkPPRE: PPRECreateOneWithoutSkillsToWorkPPREInput!
 }
 
-input SkillCreateWithoutPpreCheckupInput {
+input SkillCreateWithoutPPRECheckupInput {
+  children: SkillCreateOneWithoutChildrenInput
   id: ID
   name: String!
-  parent: SkillCreateOneWithoutParentInput
-  ppre: PPRECreateManyWithoutPpreInput
-  skill: SkillCreateOneWithoutSkillInput
+  parent: SkillCreateOneWithoutParentInput!
+  school: SchoolCreateOneWithoutSchoolInput!
+  skillsConcernedPPRE: PPRECreateOneWithoutSkillsConcernedPPREInput!
+  skillsToWorkPPRE: PPRECreateOneWithoutSkillsToWorkPPREInput!
 }
 
-input SkillCreateWithoutPpreInput {
+input SkillCreateWithoutSchoolInput {
+  children: SkillCreateOneWithoutChildrenInput
   id: ID
   name: String!
-  parent: SkillCreateOneWithoutParentInput
-  ppreCheckup: PPRECheckupCreateManyWithoutPpreCheckupInput
-  skill: SkillCreateOneWithoutSkillInput
+  parent: SkillCreateOneWithoutParentInput!
+  pPRECheckup: PPRECheckupCreateOneWithoutPPRECheckupInput
+  skillsConcernedPPRE: PPRECreateOneWithoutSkillsConcernedPPREInput!
+  skillsToWorkPPRE: PPRECreateOneWithoutSkillsToWorkPPREInput!
 }
 
-input SkillCreateWithoutSkillInput {
+input SkillCreateWithoutSkillsConcernedPPREInput {
+  children: SkillCreateOneWithoutChildrenInput
   id: ID
   name: String!
-  parent: SkillCreateOneWithoutParentInput
-  ppre: PPRECreateManyWithoutPpreInput
-  ppreCheckup: PPRECheckupCreateManyWithoutPpreCheckupInput
+  parent: SkillCreateOneWithoutParentInput!
+  pPRECheckup: PPRECheckupCreateOneWithoutPPRECheckupInput
+  school: SchoolCreateOneWithoutSchoolInput!
+  skillsToWorkPPRE: PPRECreateOneWithoutSkillsToWorkPPREInput!
+}
+
+input SkillCreateWithoutSkillsToWorkPPREInput {
+  children: SkillCreateOneWithoutChildrenInput
+  id: ID
+  name: String!
+  parent: SkillCreateOneWithoutParentInput!
+  pPRECheckup: PPRECheckupCreateOneWithoutPPRECheckupInput
+  school: SchoolCreateOneWithoutSchoolInput!
+  skillsConcernedPPRE: PPRECreateOneWithoutSkillsConcernedPPREInput!
 }
 
 input SkillWhereUniqueInput {
@@ -335,20 +361,60 @@ input SkillWhereUniqueInput {
 
 type Student {
   birthDate: DateTime!
+  classYears(after: String, before: String, first: Int, last: Int, skip: Int): [StudentClassYear!]
   firstName: String!
   gender: Gender!
   id: ID!
   lastName: String!
-  schoolYears(after: String, before: String, first: Int, last: Int, skip: Int): [SchoolYear!]
+  password: String!
   username: String!
+}
+
+type StudentClassYear {
+  classroom: Classroom!
+  id: ID!
+  ppre: PPRE
+  school: School!
+  student: Student!
+  year: DateTime!
+}
+
+input StudentClassYearCreateManyWithoutStudentsClassYearsInput {
+  connect: [StudentClassYearWhereUniqueInput!]
+  create: [StudentClassYearCreateWithoutSchoolInput!]
+}
+
+input StudentClassYearCreateOneWithoutStudentsClassYearInput {
+  connect: StudentClassYearWhereUniqueInput
+  create: StudentClassYearCreateWithoutPpreInput
+}
+
+input StudentClassYearCreateWithoutPpreInput {
+  classroom: ClassroomCreateOneWithoutClassroomInput!
+  id: ID
+  school: SchoolCreateOneWithoutSchoolInput!
+  student: StudentCreateOneWithoutStudentInput!
+  year: DateTime!
+}
+
+input StudentClassYearCreateWithoutSchoolInput {
+  classroom: ClassroomCreateOneWithoutClassroomInput!
+  id: ID
+  ppre: PPRECreateOneWithoutPpreInput
+  student: StudentCreateOneWithoutStudentInput!
+  year: DateTime!
+}
+
+input StudentClassYearWhereUniqueInput {
+  id: ID
 }
 
 input StudentCreateOneWithoutStudentInput {
   connect: StudentWhereUniqueInput
-  create: StudentCreateWithoutSchoolYearsInput
+  create: StudentCreateWithoutClassYearsInput
 }
 
-input StudentCreateWithoutSchoolYearsInput {
+input StudentCreateWithoutClassYearsInput {
   birthDate: DateTime!
   firstName: String!
   gender: Gender!
@@ -364,12 +430,17 @@ input StudentWhereUniqueInput {
 }
 
 type Teacher {
-  classroom: Classroom
+  avatar: String
+  classrooms(after: String, before: String, first: Int, last: Int, skip: Int): [Classroom!]
+  createdAt: DateTime!
+  email: String!
   firstName: String!
   id: ID!
   lastName: String!
+  password: String!
   role: Role!
   school: School!
+  updatedAt: DateTime!
   username: String!
 }
 
@@ -379,16 +450,27 @@ input TeacherCreateManyWithoutTeachersInput {
 }
 
 input TeacherCreateWithoutSchoolInput {
-  classroom: ClassroomCreateOneWithoutClassroomInput
+  avatar: String
+  classrooms: ClassroomCreateManyWithoutClassroomsInput
+  email: String!
   firstName: String!
   id: ID
   lastName: String!
   password: String!
-  role: Role
+  role: Role!
   username: String!
 }
 
 input TeacherWhereUniqueInput {
+  email: String
   id: ID
+  username: String
+}
+
+input UpdateOneTeacherInput {
+  avatar: String
+  email: String
+  firstName: String
+  lastName: String
   username: String
 }

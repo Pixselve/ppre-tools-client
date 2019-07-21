@@ -1,122 +1,149 @@
 datasource db {
-  provider = "sqlite"
-  url      = "file:dev.db"
-  default  = true
+    provider = "sqlite"
+    url      = "file:dev.db"
+    default  = true
+    enabled  = true
 }
 
+datasource postgresql {
+    provider = "postgresql"
+    url      = "postgresql://fnuvkobltgvvnx:eaf3a84c3c4646d0ec5b025beb791605fd014c7604925efad01ced8275bd29b2@ec2-46-137-91-216.eu-west-1.compute.amazonaws.com:5432/d16fq3rs3r62tg?schema=public&sslmode=prefer"
+
+    enabled  = false
+}
+
+
 generator photon {
-  provider = "photonjs"
+    provider = "photonjs"
 }
 
 generator nexus_prisma {
-  provider = "nexus-prisma"
-  output   = "../node_modules/@generated/nexus-prisma"
+    provider = "nexus-prisma"
+    output   = "../node_modules/@generated/nexus-prisma"
 }
 
 model School {
-  id    String  @default(cuid()) @id @unique
-  name String
-  website String?
-  phone String
-  teachers Teacher[] @relation(onDelete: CASCADE)
-  classrooms Classroom[] @relation(onDelete: CASCADE)
-  schoolYears SchoolYear[]
-  createdAt DateTime @default(now())
-  updatedAt  DateTime   @updatedAt
+    id                 String             @default(cuid()) @id @unique
+    name               String
+    webstite           String?
+    phone              String
+    teachers           Teacher[]
+    classrooms         Classroom[]
+    createdAt          DateTime           @default(now())
+    updatedAt          DateTime           @updatedAt
+    studentsClassYears StudentClassYear[]
+    skills             Skill[]
+}
+
+model Teacher {
+    id         String      @default(cuid()) @id @unique
+    firstName  String
+    lastName   String
+    school     School
+    avatar     String?
+    role       Role
+    username   String      @unique
+    email      String      @unique
+    password   String
+    createdAt  DateTime    @default(now())
+    updatedAt  DateTime    @updatedAt
+    classrooms Classroom[]
 }
 
 model Classroom {
-  id    String  @default(cuid()) @id @unique
-  academicLevel AcademicLevel @relation(onDelete: NONE)
-  teachers Teacher[] @relation(onDelete: NONE)
-  school School @relation(onDelete: NONE)
-  schoolYears SchoolYear[]
+    id                 String             @default(cuid()) @id @unique
+    school             School
+    createdAt          DateTime           @default(now())
+    updatedAt          DateTime           @updatedAt
+    year               String
+    name               String
+    teachers           Teacher[]
+    studentsClassYears StudentClassYear[]
+    academicLevel      String
 }
 
-model Student {
-  id    String  @default(cuid()) @id @unique
-  firstName String
-  lastName String
-  birthDate DateTime
-  gender Gender
-  password String
-  schoolYears SchoolYear[]
-  username String @unique
+model StudentClassYear {
+    id        String    @default(cuid()) @id @unique
+    student   Student
+    school    School
+    year      DateTime
+    classroom Classroom
+    ppre      PPRE?
 }
 
-model SchoolYear {
-   id    String  @default(cuid()) @id @unique
-   year DateTime
-   student Student
-   school School
-   classroom Classroom
-   ppre PPRE?
-}
-
-model AcademicLevel {
-   id    String  @default(cuid()) @id @unique
-   name String
-   classrooms Classroom[] @relation(onDelete: NONE)
-}
 
 model PPRE {
-  id    String  @default(cuid()) @id @unique
-  skills Skill[]
-  schoolYear SchoolYear
-  checkups PPRECheckup[]
-  globalAssessment String?
-  nature PPRENature
-  schoolAttendance SchoolAttendance
-  createdAt DateTime @default(now())
-  updatedAt  DateTime   @updatedAt
+    id                String           @default(cuid()) @id @unique
+    studentsClassYear StudentClassYear
+    globalAssessment  String?
+    createdAt         DateTime         @default(now())
+    updatedAt         DateTime         @updatedAt
+    nature            PPRENature
+    schoolAttendance  SchoolAttendance
+    checkups          PPRECheckup[]
+    skillsConcerned   Skill[]          @relation(name: "SkillsConcernedToPPRE")
+    skillsToWork      Skill[]          @relation(name: "SkillsToWorkToPPRE")
 }
 
 model PPRECheckup {
-  id    String  @default(cuid()) @id @unique
-  ppre PPRE
-  phase Int
-  skillWorked Skill
-  assessment String
-}
-
-
-model Teacher {
-  id    String  @default(cuid()) @id @unique
-  school School @relation(onDelete: NONE)
-  firstName String
-  lastName String
-  role Role @default(DEFAULT)
-  password String
-  username String @unique
+    id          String  @default(cuid()) @id @unique
+    ppre        PPRE
+    phase       Int
+    assessment  String
+    skillWorked Skill[]
 }
 
 model Skill {
-  id    String  @default(cuid()) @id @unique
-  parent Skill?
-  name String
-  ppreCheckup PPRECheckup[]
-  ppre PPRE[]
+    id                  String @default(cuid()) @id @unique
+    school              School
+    name                String
+    parent              Skill  @relation(name: "SkillRelation")
+    children            Skill? @relation(name: "SkillRelation")
+    skillsConcernedPPRE PPRE   @relation(name: "SkillsConcernedToPPRE")
+    skillsToWorkPPRE    PPRE   @relation(name: "SkillsToWorkToPPRE")
 }
 
+model Student {
+    id         String             @default(cuid()) @id @unique
+    classYears StudentClassYear[]
+    firstName  String
+    lastName   String
+    birthDate  DateTime
+    gender     Gender
+    username   String             @unique
+    password   String
+}
 
 enum Role {
-  DEFAULT
-  MANAGER
-  ADMIN
+    DEFAULT
+    MANAGER
+    ADMIN
 }
+
 enum Gender {
-  MALE
-  FEMALE
-  OTHER
+    MALE
+    FEMALE
+    OTHER
 }
+
 enum PPRENature {
-  REMEDIATION
-  SUPPORT
-  UPGRADE
+    REMEDIATION
+    SUPPORT
+    UPGRADE
 }
+
 enum SchoolAttendance {
-  ALWAYS
-  SHORTFREQUENTABSENCES
-  LONGABSENCES
-  FREQUENTDELAYS
+    ALWAYS
+    SHORTFREQUENTABSENCES
+    LONGABSENCES
+    FREQUENTDELAYS
+}
+
+enum AcademicLevel {
+    CP
+    CE1
+    CE2
+    CM1
+    CM2
+    SIXIEME
 }
