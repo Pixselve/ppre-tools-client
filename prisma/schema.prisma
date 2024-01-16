@@ -7,7 +7,7 @@ datasource db {
 
 datasource postgresql {
     provider = "postgresql"
-    url      = "postgresql://fnuvkobltgvvnx:eaf3a84c3c4646d0ec5b025beb791605fd014c7604925efad01ced8275bd29b2@ec2-46-137-91-216.eu-west-1.compute.amazonaws.com:5432/d16fq3rs3r62tg?schema=public&sslmode=prefer"
+    url      = "REDACTED"
 
     enabled  = false
 }
